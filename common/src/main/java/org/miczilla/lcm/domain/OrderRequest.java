@@ -11,7 +11,7 @@ public class OrderRequest
 {
   public enum Type
   {
-    REQUEST, ORDER, APPROVAL
+    REQUEST, APPROVAL
   }
 
   public enum Status

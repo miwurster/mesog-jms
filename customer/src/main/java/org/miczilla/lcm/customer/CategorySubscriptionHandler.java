@@ -48,7 +48,7 @@ public class CategorySubscriptionHandler implements CommandLineRunner
         CategorySubscription subscription
           = new CategorySubscription(customer, categorySubscriptions);
         String messageBody = JsonHelper.marshal(subscription);
-        logger.info("Sending simple text message: {}", messageBody);
+        logger.info("Sending request: {}", messageBody);
         return session.createTextMessage(messageBody);
       }
     });

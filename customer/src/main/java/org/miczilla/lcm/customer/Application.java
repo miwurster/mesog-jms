@@ -11,6 +11,7 @@ import org.apache.activemq.command.ActiveMQQueue;
 import org.apache.activemq.command.ActiveMQTempQueue;
 import org.miczilla.lcm.ConsoleCommand;
 import org.miczilla.lcm.ConsoleHelper;
+import org.miczilla.lcm.Consts;
 import org.miczilla.lcm.command.DefaultCommand;
 import org.miczilla.lcm.customer.command.OrderRequestCommand;
 import org.miczilla.lcm.customer.command.ShowOfferCommand;
@@ -78,9 +79,9 @@ public class Application implements CommandLineRunner
   }
 
   @Bean
-  public ActiveMQTempQueue orderApprovalQueue()
+  public ActiveMQQueue orderApprovalQueue()
   {
-    return new ActiveMQTempQueue("approval.customer." + customer);
+    return new ActiveMQQueue(Consts.ORDER_APPROVAL_QUEUE_NAME + customer);
   }
 
   @Bean

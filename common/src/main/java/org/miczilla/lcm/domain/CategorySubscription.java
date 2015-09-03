@@ -7,6 +7,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.miczilla.lcm.Consts;
 import org.miczilla.lcm.JsonHelper;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -55,7 +56,7 @@ public class CategorySubscription
 
   public String getReplyToQueueName()
   {
-    return SpecialOffer.QUEUE_NAME + this.customer;
+    return Consts.SPECIAL_OFFER_QUEUE_NAME + this.customer;
   }
 
   @Override

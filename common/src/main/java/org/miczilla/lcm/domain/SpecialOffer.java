@@ -9,8 +9,6 @@ import org.miczilla.lcm.JsonHelper;
 
 public class SpecialOffer
 {
-  public static final String QUEUE_NAME = "org.miczilla.lcm.shop.SPECIAL_OFFER.";
-
   private String id = UUID.randomUUID().toString();
   private Set<Product> products = new LinkedHashSet<>();
 

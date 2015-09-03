@@ -2,11 +2,13 @@ package org.miczilla.lcm.shop;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 import javax.annotation.PostConstruct;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.miczilla.lcm.domain.CategorySubscription;
+import org.miczilla.lcm.domain.OrderRequest;
 import org.miczilla.lcm.domain.Product;
 import org.miczilla.lcm.domain.ProductInventory;
 import org.springframework.stereotype.Component;
@@ -91,41 +93,42 @@ public class DataAccess
     return subscriptions;
   }
 
-//  public boolean checkProductAvailability(final Product product, final int amount)
-//  {
-//    ProductInventory inventory =
-//      (ProductInventory) CollectionUtils.find(productInventory, new ProductPredicate(product));
-//    return inventory != null && inventory.getAmount() >= amount;
-//  }
-//
-//  public boolean checkAvailability(final Set<OrderEntry> order)
-//  {
-//    for (OrderEntry entry : order)
-//    {
-//      boolean productAvailable
-//        = checkProductAvailability(entry.getProduct(), entry.getAmount());
-//      if (!productAvailable)
-//      {
-//        return false;
-//      }
-//    }
-//    return true;
-//  }
+  public boolean checkProductAvailability(final Product product, final int amount)
+  {
+    ProductInventory inventory =
+      (ProductInventory) CollectionUtils.find(productInventory, new ProductPredicate(product));
+    return inventory != null && inventory.getAmount() >= amount;
+  }
 
-//  private static class ProductPredicate implements Predicate
-//  {
-//    private Product product;
-//
-//    public ProductPredicate(final Product product)
-//    {
-//      this.product = product;
-//    }
-//
-//    @Override
-//    public boolean evaluate(final Object object)
-//    {
-//      ProductInventory o = (ProductInventory) object;
-//      return product.equals(o.getProduct());
-//    }
-//  }
+  public boolean checkAvailability(final OrderRequest orderRequest)
+  {
+    for (Map.Entry<String, Integer> entry : orderRequest.getOrderEntries().entrySet()) {
+      // Create an arbitrary product to check the availability
+      Product product = Product.create().id(entry.getKey()).build();
+      int amount = entry.getValue();
+      boolean productAvailable = checkProductAvailability(product, amount);
+      if (!productAvailable)
+      {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private static class ProductPredicate implements Predicate
+  {
+    private Product product;
+
+    public ProductPredicate(final Product product)
+    {
+      this.product = product;
+    }
+
+    @Override
+    public boolean evaluate(final Object object)
+    {
+      ProductInventory o = (ProductInventory) object;
+      return product.equals(o.getProduct());
+    }
+  }
 }

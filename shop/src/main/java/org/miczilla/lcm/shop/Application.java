@@ -42,8 +42,6 @@ public class Application implements CommandLineRunner
   public static final String COMMAND_LIST_INVENTORY = "inventory";
   public static final String COMMAND_LIST_SUBSCRIPTIONS = "subscriptions";
   public static final String COMMAND_LIST_ORDERS = "orders";
-  public static final String COMMAND_APPROVE_ORDER = "approve";
-  public static final String COMMAND_REJECT_ORDER = "reject";
   public static final String COMMAND_EXIT = "exit";
 
   @Autowired
@@ -76,8 +74,7 @@ public class Application implements CommandLineRunner
   {
     return CacheBuilder.newBuilder()
       .maximumSize(200)
-        // .expireAfterWrite(1, TimeUnit.HOURS)
-      .expireAfterWrite(1, TimeUnit.SECONDS)
+      .expireAfterWrite(1, TimeUnit.HOURS)
       .build();
   }
 
@@ -116,10 +113,6 @@ public class Application implements CommandLineRunner
           break;
         case COMMAND_LIST_ORDERS:
           break;
-        case COMMAND_APPROVE_ORDER:
-          break;
-        case COMMAND_REJECT_ORDER:
-          break;
         case COMMAND_EXIT:
           command = new ConsoleCommand()
           {
@@ -146,9 +139,7 @@ public class Application implements CommandLineRunner
     ConsoleHelper.println("> " + COMMAND_NEW_OFFER + " <product ID> [ <product ID> ... ] : Creates/sends a new offer for the given products");
     ConsoleHelper.println("> " + COMMAND_LIST_INVENTORY + " : Shows the current product inventory");
     ConsoleHelper.println("> " + COMMAND_LIST_SUBSCRIPTIONS + " : Displays the category subscriptions of our customers");
-    ConsoleHelper.println("> " + COMMAND_LIST_ORDERS + " : Shows order requests from our customers");
-    ConsoleHelper.println("> " + COMMAND_APPROVE_ORDER + " <order ID> : Approves a given order request");
-    ConsoleHelper.println("> " + COMMAND_REJECT_ORDER + " <order ID> : Rejects a given order request");
+    ConsoleHelper.println("> " + COMMAND_LIST_ORDERS + " : Shows orders from our customers");
     ConsoleHelper.println("> " + COMMAND_EXIT + " : Exits the Shop Application");
   }
 }

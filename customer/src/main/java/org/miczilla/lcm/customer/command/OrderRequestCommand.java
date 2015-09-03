@@ -7,6 +7,8 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
 import javax.jms.TextMessage;
+
+import org.apache.activemq.command.ActiveMQQueue;
 import org.apache.activemq.command.ActiveMQTempQueue;
 import org.miczilla.lcm.ConsoleCommand;
 import org.miczilla.lcm.ConsoleHelper;
@@ -32,7 +34,7 @@ public class OrderRequestCommand implements ConsoleCommand
   private JmsTemplate jmsTemplate;
 
   @Autowired
-  private ActiveMQTempQueue orderApprovalQueue;
+  private ActiveMQQueue orderApprovalQueue;
 
   @Override
   public void execute(final Set<String> args)
@@ -64,7 +66,5 @@ public class OrderRequestCommand implements ConsoleCommand
         return message;
       }
     });
-    // Remove processed offer from local queue
-    specialOffers.poll();
   }
 }

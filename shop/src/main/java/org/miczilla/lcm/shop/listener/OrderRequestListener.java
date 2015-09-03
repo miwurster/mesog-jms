@@ -2,6 +2,7 @@ package org.miczilla.lcm.shop.listener;
 
 import com.google.common.cache.Cache;
 import javax.jms.JMSException;
+import javax.jms.Queue;
 import javax.jms.Session;
 import javax.jms.TemporaryQueue;
 import org.miczilla.lcm.JsonHelper;
@@ -38,75 +39,52 @@ public class OrderRequestListener
   @JmsListener(destination = "orderRequestQueue")
   public JmsResponse<Message<String>> onMessage(Message<String> message)
   {
+    logger.info("Received order request...");
+
     final String payload = message.getPayload();
     final MessageHeaders headers = message.getHeaders();
 
     logger.debug("Processing message: {}", payload);
     logger.debug("Headers: {}", headers);
 
-    final TemporaryQueue replyTo = headers.get(JmsHeaders.REPLY_TO, TemporaryQueue.class);
+    final Queue replyTo = headers.get(JmsHeaders.REPLY_TO, Queue.class);
     final String correlationId = headers.get(JmsHeaders.CORRELATION_ID, String.class);
     final OrderRequest orderRequest = JsonHelper.unmarshal(payload, OrderRequest.class);
     final SpecialOffer offer = specialOffers.getIfPresent(correlationId);
     if (offer == null)
     {
-      // Prepare and reject response
-      orderRequest.setType(OrderRequest.Type.APPROVAL);
-      orderRequest.setStatus(OrderRequest.Status.REJECTED);
-      final Message<String> response = MessageBuilder
+      logger.info("Order request is invalid, probably because order has been expired.");
+      return rejectOrderRequest(replyTo, correlationId, orderRequest);
+    }
+
+    boolean approveOrder = dataAccess.checkAvailability(orderRequest);
+    if (approveOrder)
+    {
+      logger.info("Approving order.");
+      return approveOrderRequest(replyTo, correlationId, orderRequest);
+    }
+
+    logger.info("Rejecting order request, products may not be available as requested.");
+    return rejectOrderRequest(replyTo, correlationId, orderRequest);
+  }
+
+  private JmsResponse<Message<String>> approveOrderRequest(final Queue replyTo, final String correlationId, final OrderRequest orderRequest) {
+    orderRequest.setType(OrderRequest.Type.APPROVAL);
+    orderRequest.setStatus(OrderRequest.Status.APPROVED);
+    return createReplyMessage(replyTo, correlationId, orderRequest);
+  }
+
+  private JmsResponse<Message<String>> rejectOrderRequest(final Queue replyTo, final String correlationId, final OrderRequest orderRequest) {
+    orderRequest.setType(OrderRequest.Type.APPROVAL);
+    orderRequest.setStatus(OrderRequest.Status.REJECTED);
+    return createReplyMessage(replyTo, correlationId, orderRequest);
+  }
+
+  private JmsResponse<Message<String>> createReplyMessage(final Queue replyTo, final String correlationId, final OrderRequest orderRequest) {
+    final Message<String> response = MessageBuilder
         .withPayload(JsonHelper.marshal(orderRequest))
         .setHeader(JmsHeaders.CORRELATION_ID, correlationId)
         .build();
-      return JmsResponse.forDestination(response, replyTo);
-    }
-
-//    Set<OrderEntry> order = new LinkedHashSet<>();
-//    for (Map.Entry<String, Integer> entry : payload.entrySet())
-//    {
-//      String id = entry.getKey();
-//      Integer amount = entry.getValue();
-//      Product product = dataAccess.lookupProductById(id);
-//      if (product != null)
-//      {
-//        order.add(new OrderEntry(product, amount));
-//      }
-//    }
-//
-//    boolean approveOrder = dataAccess.checkAvailability(order);
-//    if (approveOrder)
-//    {
-//      // TODO: Send approval message
-//    }
-//    else
-//    {
-//      // TODO: Reject order
-//    }
-
-    return null;
-  }
-
-  private void approveOrderRequest()
-  {
-
-  }
-
-  private void rejectOrderRequest(final MessageHeaders headers)
-  {
-    String replyToDestination = headers.get(JmsHeaders.REPLY_TO, String.class);
-    jmsTemplate.send(replyToDestination, new MessageCreator()
-    {
-      @Override
-      public javax.jms.Message createMessage(final Session session) throws JMSException
-      {
-        return null;
-      }
-    });
+    return JmsResponse.forDestination(response, replyTo);
   }
 }
-
-//    return MessageBuilder
-//      .withPayload("foo")
-//      .setHeader("code", 1234)
-//      .build();
-// ;
-// @SendTo("org.miczilla.lcm.shop.INVALID_ORDER_REQUEST")

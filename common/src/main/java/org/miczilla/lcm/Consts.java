@@ -5,6 +5,9 @@ package org.miczilla.lcm;
  */
 public final class Consts
 {
+  public static final String SPECIAL_OFFER_QUEUE_NAME = "org.miczilla.lcm.shop.SPECIAL_OFFER.";
+  public static final String ORDER_APPROVAL_QUEUE_NAME = "org.miczilla.lcm.shop.ORDER_APPROVAL.";
+
   public static final boolean PASSES = true;
   public static final boolean FAILS = false;
 
