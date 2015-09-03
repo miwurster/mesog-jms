@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:amq="http://activemq.apache.org/schema/core"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://activemq.apache.org/schema/core
+        http://activemq.apache.org/schema/core/activemq-core.xsd">
+
+  <amq:connectionFactory id="jmsConnectionFactory" brokerURL="failover:tcp://localhost:61616"/>
+
+  <bean id="connectionFactory" class="org.apache.activemq.pool.PooledConnectionFactory">
+    <property name="connectionFactory" ref="jmsConnectionFactory"/>
+  </bean>
+
+  <amq:queue id="orderRequestQueue" physicalName="org.miczilla.lcm.shop.ORDER_REQUEST"/>
+  <amq:queue id="orderPlacementQueue" physicalName="org.miczilla.lcm.shop.ORDER_PLACEMENT"/>
+
+  <amq:queue id="categorySubscriptionQueue" physicalName="org.miczilla.lcm.shop.CATEGORY_SUBSCRIPTION"/>
+
+</beans>
