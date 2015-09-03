@@ -11,6 +11,7 @@
   </parent>
 
   <artifactId>customer</artifactId>
+  <name>${artifactId}</name>
 
   <dependencies>
     <dependency>

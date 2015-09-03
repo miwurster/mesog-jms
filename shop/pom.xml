@@ -11,6 +11,7 @@
   </parent>
 
   <artifactId>shop</artifactId>
+  <name>${artifactId}</name>
 
   <dependencies>
     <dependency>

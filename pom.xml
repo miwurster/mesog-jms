@@ -6,6 +6,7 @@
 
   <groupId>org.miczilla.lcm</groupId>
   <artifactId>components</artifactId>
+  <name>${artifactId}</name>
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
@@ -99,16 +100,8 @@
     <pluginManagement>
       <plugins>
         <plugin>
-          <groupId>org.codehaus.groovy</groupId>
-          <artifactId>groovy-eclipse-compiler</artifactId>
-        </plugin>
-        <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
           <configuration>
-            <compilerId>groovy-eclipse-compiler</compilerId>
-            <compilerArgs>
-              <arg>-Xlint:all,-path,-serial</arg>
-            </compilerArgs>
             <showDeprecation>true</showDeprecation>
             <showWarnings>true</showWarnings>
             <source>${java.version}</source>
