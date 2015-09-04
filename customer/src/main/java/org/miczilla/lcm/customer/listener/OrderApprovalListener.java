@@ -1,5 +1,10 @@
 package org.miczilla.lcm.customer.listener;
 
+import java.util.Queue;
+import javax.annotation.Resource;
+import javax.jms.JMSException;
+import javax.jms.Session;
+import javax.jms.TextMessage;
 import org.miczilla.lcm.JsonHelper;
 import org.miczilla.lcm.domain.Order;
 import org.miczilla.lcm.domain.OrderRequest;
@@ -11,20 +16,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
-import org.springframework.jms.listener.adapter.JmsResponse;
-import org.springframework.jms.support.JmsHeaders;
 import org.springframework.messaging.Message;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
-import javax.jms.JMSException;
-import javax.jms.Session;
-import java.util.Queue;
-
 @Component
-public class OrderApprovalListener {
-
+public class OrderApprovalListener
+{
   private static Logger logger = LoggerFactory.getLogger(OrderApprovalListener.class);
 
   @Value("${customer}")
@@ -37,12 +34,14 @@ public class OrderApprovalListener {
   private JmsTemplate jmsTemplate;
 
   @JmsListener(destination = "orderApprovalQueue")
-  public void onMessage(Message<String> message) {
+  public void onMessage(Message<String> message) throws Exception
+  {
     final String payload = message.getPayload();
     logger.debug("Processing message: {}", payload);
 
     final OrderRequest orderRequest = JsonHelper.unmarshal(payload, OrderRequest.class);
-    if (OrderRequest.Status.APPROVED.equals(orderRequest.getStatus())) {
+    if (OrderRequest.Status.APPROVED.equals(orderRequest.getStatus()))
+    {
       logger.info("Order request has been approved.");
 
       final Order.PaymentDetails paymentDetails = new Order.PaymentDetails();
@@ -64,10 +63,28 @@ public class OrderApprovalListener {
       specialOffers.poll();
       logger.info("Placing order: {}", order);
 
-      final Message<String> response = MessageBuilder
-          .withPayload(JsonHelper.marshal(order)).build();
-      jmsTemplate.convertAndSend("orderPlacementQueue", response);
-    } else {
+      final javax.jms.Message shopResponse
+        = jmsTemplate.sendAndReceive("orderPlacementQueue", new MessageCreator()
+      {
+        @Override
+        public javax.jms.Message createMessage(final Session session) throws JMSException
+        {
+          return session.createTextMessage(JsonHelper.marshal(order));
+        }
+      });
+
+      if (shopResponse != null && shopResponse instanceof TextMessage)
+      {
+        TextMessage response = (TextMessage) shopResponse;
+        logger.info("Shop response: {}", response.getText());
+      }
+      else
+      {
+        logger.info("Not sure if the order could be delivered...");
+      }
+    }
+    else
+    {
       logger.info("Order request has been rejected.");
     }
   }

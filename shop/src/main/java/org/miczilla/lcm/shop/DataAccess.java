@@ -102,7 +102,8 @@ public class DataAccess
 
   public boolean checkAvailability(final OrderRequest orderRequest)
   {
-    for (Map.Entry<String, Integer> entry : orderRequest.getOrderEntries().entrySet()) {
+    for (Map.Entry<String, Integer> entry : orderRequest.getOrderEntries().entrySet())
+    {
       // Create an arbitrary product to check the availability
       Product product = Product.create().id(entry.getKey()).build();
       int amount = entry.getValue();
@@ -113,6 +114,25 @@ public class DataAccess
       }
     }
     return true;
+  }
+
+  public Set<Product> buyProducts(final Map<String, Integer> orderEntries)
+  {
+    Set<Product> products = new LinkedHashSet<>();
+    for (Map.Entry<String, Integer> entry : orderEntries.entrySet())
+    {
+      Product product = this.lookupProductById(entry.getKey());
+      this.buyProduct(product, entry.getValue());
+      products.add(product);
+    }
+    return products;
+  }
+
+  private void buyProduct(final Product product, final Integer amount)
+  {
+    ProductInventory inventory =
+      (ProductInventory) CollectionUtils.find(productInventory, new ProductPredicate(product));
+    inventory.setAmount(inventory.getAmount() - amount);
   }
 
   private static class ProductPredicate implements Predicate

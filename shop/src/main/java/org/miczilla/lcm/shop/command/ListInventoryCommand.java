@@ -5,8 +5,6 @@ import org.miczilla.lcm.ConsoleCommand;
 import org.miczilla.lcm.ConsoleHelper;
 import org.miczilla.lcm.domain.ProductInventory;
 import org.miczilla.lcm.shop.DataAccess;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

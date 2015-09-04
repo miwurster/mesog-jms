@@ -1,10 +1,7 @@
 package org.miczilla.lcm.shop.listener;
 
 import com.google.common.cache.Cache;
-import javax.jms.JMSException;
 import javax.jms.Queue;
-import javax.jms.Session;
-import javax.jms.TemporaryQueue;
 import org.miczilla.lcm.JsonHelper;
 import org.miczilla.lcm.domain.OrderRequest;
 import org.miczilla.lcm.domain.SpecialOffer;
@@ -14,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.jms.core.JmsTemplate;
-import org.springframework.jms.core.MessageCreator;
 import org.springframework.jms.listener.adapter.JmsResponse;
 import org.springframework.jms.support.JmsHeaders;
 import org.springframework.messaging.Message;
@@ -68,23 +64,26 @@ public class OrderRequestListener
     return rejectOrderRequest(replyTo, correlationId, orderRequest);
   }
 
-  private JmsResponse<Message<String>> approveOrderRequest(final Queue replyTo, final String correlationId, final OrderRequest orderRequest) {
+  private JmsResponse<Message<String>> approveOrderRequest(final Queue replyTo, final String correlationId, final OrderRequest orderRequest)
+  {
     orderRequest.setType(OrderRequest.Type.APPROVAL);
     orderRequest.setStatus(OrderRequest.Status.APPROVED);
     return createReplyMessage(replyTo, correlationId, orderRequest);
   }
 
-  private JmsResponse<Message<String>> rejectOrderRequest(final Queue replyTo, final String correlationId, final OrderRequest orderRequest) {
+  private JmsResponse<Message<String>> rejectOrderRequest(final Queue replyTo, final String correlationId, final OrderRequest orderRequest)
+  {
     orderRequest.setType(OrderRequest.Type.APPROVAL);
     orderRequest.setStatus(OrderRequest.Status.REJECTED);
     return createReplyMessage(replyTo, correlationId, orderRequest);
   }
 
-  private JmsResponse<Message<String>> createReplyMessage(final Queue replyTo, final String correlationId, final OrderRequest orderRequest) {
+  private JmsResponse<Message<String>> createReplyMessage(final Queue replyTo, final String correlationId, final OrderRequest orderRequest)
+  {
     final Message<String> response = MessageBuilder
-        .withPayload(JsonHelper.marshal(orderRequest))
-        .setHeader(JmsHeaders.CORRELATION_ID, correlationId)
-        .build();
+      .withPayload(JsonHelper.marshal(orderRequest))
+      .setHeader(JmsHeaders.CORRELATION_ID, correlationId)
+      .build();
     return JmsResponse.forDestination(response, replyTo);
   }
 }

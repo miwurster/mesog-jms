@@ -1,6 +1,5 @@
 package org.miczilla.lcm.customer;
 
-import java.util.List;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Queue;

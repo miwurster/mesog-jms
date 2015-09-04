@@ -7,9 +7,7 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
 import javax.jms.TextMessage;
-
 import org.apache.activemq.command.ActiveMQQueue;
-import org.apache.activemq.command.ActiveMQTempQueue;
 import org.miczilla.lcm.ConsoleCommand;
 import org.miczilla.lcm.ConsoleHelper;
 import org.miczilla.lcm.JsonHelper;

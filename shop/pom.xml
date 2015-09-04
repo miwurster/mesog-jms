@@ -5,13 +5,13 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <artifactId>components</artifactId>
+    <artifactId>mesog-jms</artifactId>
     <groupId>org.miczilla.lcm</groupId>
     <version>1.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>shop</artifactId>
-  <name>${artifactId}</name>
+  <name>${project.artifactId}</name>
 
   <dependencies>
     <dependency>
@@ -23,10 +23,14 @@
       <artifactId>spring-boot-starter</artifactId>
       <exclusions>
         <exclusion>
-          <groupId>ch.qos.logback</groupId>
-          <artifactId>logback-classic</artifactId>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-logging</artifactId>
         </exclusion>
       </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-log4j</artifactId>
     </dependency>
     <dependency>
       <groupId>junit</groupId>

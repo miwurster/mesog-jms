@@ -2,8 +2,6 @@ package org.miczilla.lcm.shop;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
