@@ -97,6 +97,11 @@ public final class ConsoleHelper
     println(StringUtils.center(fullText, 40, '+'));
   }
 
+  public static void printSeparator()
+  {
+    println(StringUtils.center(Consts.EMPTY_STRING, 80, '='));
+  }
+
   private ConsoleHelper()
   {
     throw new UnsupportedOperationException();

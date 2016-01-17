@@ -6,7 +6,6 @@
 
   <groupId>org.miczilla.lcm</groupId>
   <artifactId>mesog-jms</artifactId>
-  <name>${project.artifactId}</name>
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
@@ -14,21 +13,22 @@
     <module>common</module>
     <module>shop</module>
     <module>customer</module>
+    <module>samples</module>
   </modules>
 
   <properties>
     <java.version>1.7</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <activemq.version>5.12.0</activemq.version>
+    <junit.version>4.11</junit.version>
+    <activemq.version>5.12.1</activemq.version>
+    <spring.version>4.2.3.RELEASE</spring.version>
+    <spring-boot.version>1.3.0.RELEASE</spring-boot.version>
+    <guava.version>19.0</guava.version>
+    <commons-lang.version>2.6</commons-lang.version>
+    <jackson.version>1.9.13</jackson.version>
     <slf4j.version>1.5.8</slf4j.version>
     <log4j.version>1.2.14</log4j.version>
-    <jackson.version>1.9.13</jackson.version>
-    <commons-lang.version>2.6</commons-lang.version>
-    <junit.version>4.11</junit.version>
-    <guava.version>18.0</guava.version>
-    <spring-boot.version>1.2.4.RELEASE</spring-boot.version>
-    <spring.version>4.2.0.RELEASE</spring.version>
   </properties>
 
   <dependencyManagement>
