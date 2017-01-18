@@ -14,6 +14,16 @@ This is a very simple, command-line based shop implementation. We are using **Ap
 * The Shop checks its internal Inventory for availability of the requested products and the amount of items to either approve or reject a Customer's request.
 * Once confirmed by the Shop, a Customer can buy the product(s) by providing the following information: product IDs, number of items per product ID, shipping address, and payment details.
 
+## Usage
+
+```
+mvn clean install
+docker-compose up
+java -jar shop\target\shop-1.0-SNAPSHOT.jar
+java -jar customer\target\customer-1.0-SNAPSHOT.jar --customer=foo --category=Flashlights
+java -jar customer\target\customer-1.0-SNAPSHOT.jar --customer=bar --category=HDD
+```
+
 ## License
 
 [MIT](http://opensource.org/licenses/MIT) © [Michael Wurster](http://miwurster.com)
