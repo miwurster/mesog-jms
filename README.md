@@ -1,6 +1,6 @@
 ## Messaging‐based Special Offer Gadget (MeSOG) Shop
 
-> Lab exercise of [Loose Coupling & Messaging](http://www.iaas.uni-stuttgart.de/lehre/vorlesung) lecture.
+> Lab exercise of lecture [Loose Coupling and Message-based Integration](http://www.iaas.uni-stuttgart.de/lehre/vorlesung/aktuell/vorlesungen/lcm/) at the University of Stuttgart.
 
 This is a very simple, command-line based shop implementation. We are using **Apache ActiveMQ** and **JMS** for messaging and **Spring** and **Spring Boot** as our application framework.
 
